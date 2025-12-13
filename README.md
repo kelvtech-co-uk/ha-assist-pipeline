@@ -1,6 +1,6 @@
 # Home Assistant Assit Pipeline using Whisper.cpp built for Intel OpenVINO capable CPU/iGPUs.
 
-I wanted to add text-to-speach (TTS) and speach-to-text (STT) capability to my home assistant installation and start to break away from Google!  I quickly found HA's documentation on their Assist pipeline and started reading about Piper and Whisper.  I've not included Piper (TTS) here as that was straightforward to deploy using https://github.com/linuxserver/docker-piper.
+I wanted to add text-to-speach (TTS) and speach-to-text (STT) capability to my home assistant installation and start to break away from Google!  I quickly found HA's documentation on their Assist pipeline and started reading about Piper and Whisper.  I've not included Piper (TTS) here as that was straightforward to deploy using the official piper [container](https://hub.docker.com/r/rhasspy/wyoming-piper).
 
 For STT I opted to use Whisper instead of HA's speach-to-phrase alternative as I want to build a further integration to an offline LLM at a later date.  Whisper's more open ended dialogue type was preferable and I quickly started reading at https://github.com/ggml-org/whisper.cpp.
 
