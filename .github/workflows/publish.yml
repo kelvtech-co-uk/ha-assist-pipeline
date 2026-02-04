@@ -20,12 +20,17 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      # 1. Get Whisper version from your .env
-      - name: Get Whisper Version
-        id: whisper_ver
+      - name: Load Environment Variables from .env
+        id: dotenv
         run: |
-          VERSION=$(grep WHISPER_CPP_VERSION .env | cut -d'=' -f2)
-          echo "VERSION=$VERSION" >> $GITHUB_OUTPUT
+          # Read .env file line by line, ignore comments and empty lines
+          while IFS='=' read -r key value; do
+            if [[ ! $key =~ ^# && -n $key ]]; then
+              # Trim potential whitespace/quotes and export to GitHub Outputs
+              val=$(echo "$value" | tr -d '"' | tr -d "'")
+              echo "$key=$val" >> $GITHUB_OUTPUT
+            fi
+          done < .env
 
       # 2. Generate a version for the API based on current date
       - name: Generate API Version
