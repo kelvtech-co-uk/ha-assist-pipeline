@@ -20,17 +20,10 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Load Environment Variables from .env
-        id: dotenv
+      - name: Load .env file
+        # This one-liner parses the .env and sets them as actual environment variables
         run: |
-          # Read .env file line by line, ignore comments and empty lines
-          while IFS='=' read -r key value; do
-            if [[ ! $key =~ ^# && -n $key ]]; then
-              # Trim potential whitespace/quotes and export to GitHub Outputs
-              val=$(echo "$value" | tr -d '"' | tr -d "'")
-              echo "$key=$val" >> $GITHUB_OUTPUT
-            fi
-          done < .env
+          grep -v '^#' .env | grep -v '^[[:space:]]*$' >> $GITHUB_ENV
 
       # 2. Generate a version for the API based on current date
       - name: Generate API Version
@@ -58,16 +51,16 @@ jobs:
           push: true
           platforms: linux/amd64
           build-args: |
-            WHISPER_LANG=${{ steps.dotenv.outputs.WHISPER_LANG }}
-            WHISPER_BEAM_SIZE=${{ steps.dotenv.outputs.WHISPER_BEAM_SIZE }}
-            WHISPER_MODEL=${{ steps.dotenv.outputs.WHISPER_MODEL }}   
-            WHISPER_PROMPT=${{ steps.dotenv.outputs.WHISPER_PROMPT }}
-            WHISPER_CPP_VERSION=${{ steps.dotenv.outputs.WHISPER_CPP_VERSION }}
-            OPENVINO_TGZ=${{ steps.dotenv.outputs.OPENVINO_TGZ }}
-            OPENVINO_DIR_NAME=${{ steps.dotenv.outputs.OPENVINO_DIR_NAME }}
-            OPENVINO_URL=${{ steps.dotenv.outputs.OPENVINO_URL }}
+            WHISPER_LANG=${{ env.WHISPER_LANG }}
+            WHISPER_BEAM_SIZE=${{ env.WHISPER_BEAM_SIZE }}
+            WHISPER_MODEL=${{ env.WHISPER_MODEL }}
+            WHISPER_PROMPT=${{ env.WHISPER_PROMPT }}
+            WHISPER_CPP_VERSION=${{ env.WHISPER_CPP_VERSION }}
+            OPENVINO_TGZ=${{ env.OPENVINO_TGZ }}
+            OPENVINO_DIR_NAME=${{ env.OPENVINO_DIR_NAME }}
+            OPENVINO_URL=${{ env.OPENVINO_URL }}
           tags: |
-            ghcr.io/kelvtech-co-uk/ha-whisper-cpp:${{ steps.dotenv.outputs.WHISPER_CPP_VERSION }}
+            ghcr.io/kelvtech-co-uk/ha-whisper-cpp:${{ env.WHISPER_CPP_VERSION }}
             ghcr.io/kelvtech-co-uk/ha-whisper-cpp:latest
           cache-from: type=gha
           cache-to: type=gha,mode=max
