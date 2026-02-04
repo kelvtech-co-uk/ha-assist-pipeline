@@ -33,6 +33,7 @@ RUN git clone https://github.com/ggerganov/whisper.cpp.git whisper.cpp \
     && python3 -m venv openvino_conv_env \
     && source openvino_conv_env/bin/activate \
     && python -m pip install --upgrade pip \
+    && pip install onnx onnxscript \
     && pip install -r requirements-openvino.txt \
     && ./download-ggml-model.sh ${WHISPER_MODEL} \
     && python3 convert-whisper-to-openvino.py --model ${WHISPER_MODEL} \
