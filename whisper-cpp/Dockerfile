@@ -39,7 +39,7 @@ RUN git clone https://github.com/ggerganov/whisper.cpp.git whisper.cpp \
     && python3 convert-whisper-to-openvino.py --model ${WHISPER_MODEL} \
     && deactivate
 
-RUN wget -q ${OPENVINO_URL} -O ${OPENVINO_TGZ} \
+RUN wget -q ${OPENVINO_URL}${OPENVINO_TGZ} -O ${OPENVINO_TGZ} \
     && tar -xf ${OPENVINO_TGZ} \
     && rm ${OPENVINO_TGZ} \
     && mkdir intel \
